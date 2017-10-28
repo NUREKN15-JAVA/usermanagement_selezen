@@ -8,6 +8,15 @@ public class User {
 	private String firstName;
 	private String lastName;
 	private Date dateOfBirthday;
+	public User(User user) {
+		id = user.getId();
+		firstName = user.getFirstName();
+		lastName = user.getLastName();
+		dateOfBirthday = user.getDateOfBirthday();
+	}
+	public User() {
+		
+	}
 	public Long getId() {
 		return id;
 	}

@@ -1,20 +1,20 @@
 package ua.nure.selezen.anastasiia.kn156;
 
-import static org.junit.Assert.*;
 import java.util.Calendar;
 import java.util.Date;
-import org.junit.Before;
-import org.junit.Test;
 import junit.framework.TestCase;
 
 public class UserTest extends TestCase {
 	private User user;
 	private Date dateOfBirthday;
+	/**
+	 * Constant AGE indicate the age as of 29.10.17 
+	 */
 	private static final int AGE = 19;
 	private static final int YEAR = 1998;
 	private static final int DAY = 29;
 
-	@Before
+	
 	public void setUp() throws Exception {
 		super.setUp();
 		user = new User();
@@ -24,7 +24,7 @@ public class UserTest extends TestCase {
 		
 	}
 
-	@Test
+	
 	public void testGetFullName() {
 		user.setFirstName("Anastasiia");
 		user.setLastName("Selezen");

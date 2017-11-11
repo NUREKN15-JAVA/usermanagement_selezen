@@ -3,44 +3,75 @@ package ua.nure.selezen.anastasiia.kn156.db;
 import java.io.IOException;
 import java.util.Properties;
 
-public class DaoFactory {
+import javax.management.RuntimeErrorException;
 
-	private static final String USER_DAO = "dao.ua.nure.selezen.anastasiia.kn156.db.UserDAO";
-	private final Properties properties;
+public abstract class DaoFactory {
 
-	private final static DaoFactory INSTANCE = new DaoFactory();
+	protected static final String USER_DAO = "dao.ua.nure.selezen.anastasiia.kn156.db.UserDAO";
+	protected static Properties properties;
+	private static final String DAO_FACTORY = "dao.factory";
 
-	public static DaoFactory getInstance() {
-		return INSTANCE;
-	}
+	private static DaoFactory INSTANCE;
 
-	private DaoFactory() {
+	static {
 		properties = new Properties();
 		try {
-			properties.load(getClass().getClassLoader().getResourceAsStream("settings.properties"));
+			properties.load(DaoFactory.class.getClassLoader().getResourceAsStream("settings.properties"));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	private ConnectionFactory getConnectionFactory() {
-		String user = properties.getProperty("connection.user");
-		String password = properties.getProperty("connection.password");
-		String url = properties.getProperty("connection.url");
-		String driver = properties.getProperty("connection.driver");
+	public static synchronized DaoFactory getInstance() {
+		if (INSTANCE == null) {
+			Class factoryClass;
+			try {
+				factoryClass = Class.forName(properties.getProperty(DAO_FACTORY));
+				INSTANCE = (DaoFactory) factoryClass.newInstance();
 
-		return new ConnectionFactoryImpl(driver, url, user, password);
-	}
+			} catch (Exception e) {
+				throw new RuntimeException(e);
 
-	public UserDAO getUserDao() {
-		UserDAO result = null;
-		try {
-			Class clazz = Class.forName(properties.getProperty(USER_DAO));
-			result = (UserDAO) clazz.newInstance();
-		} catch (ReflectiveOperationException e) {
-			throw new RuntimeException(e);
+			}
 		}
-		result.setConnectionFactory(getConnectionFactory());
-		return result;
+		return INSTANCE;
 	}
+
+	protected DaoFactory() {
+
+	}
+
+	/*
+	 * private DaoFactory() { properties = new Properties(); try {
+	 * properties.load(getClass().getClassLoader().getResourceAsStream(
+	 * "settings.properties")); } catch (IOException e) { throw new
+	 * RuntimeException(e); } }
+	 */
+	/*
+	 * protected ConnectionFactory getConnectionFactory() { String user =
+	 * properties.getProperty("connection.user"); String password =
+	 * properties.getProperty("connection.password"); String url =
+	 * properties.getProperty("connection.url"); String driver =
+	 * properties.getProperty("connection.driver");
+	 * 
+	 * return new ConnectionFactoryImpl(driver, url, user, password); }
+	 */
+	public static void init(Properties prop) {
+		properties = prop;
+		INSTANCE = null;
+	}
+
+	protected ConnectionFactory getConnectionFactory() {
+		return new ConnectionFactoryImpl(properties);
+	}
+
+	public abstract UserDAO getUserDao();
+	/*
+	 * { UserDAO result = null; try { Class clazz =
+	 * Class.forName(properties.getProperty(USER_DAO)); result = (UserDAO)
+	 * clazz.newInstance(); } catch (ReflectiveOperationException e) { throw new
+	 * RuntimeException(e); }
+	 * result.setConnectionFactory(getConnectionFactory()); return result; } }
+	 */
+
 }

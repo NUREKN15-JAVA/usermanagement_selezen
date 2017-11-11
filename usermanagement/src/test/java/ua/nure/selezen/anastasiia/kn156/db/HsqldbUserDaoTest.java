@@ -22,7 +22,7 @@ public class HsqldbUserDaoTest extends DatabaseTestCase {
 	private static final String PASSWORD = "";
 	private static final int NUMBER_OF_ROWS = 3;
 	private static final Long ID = 1000L;
-	
+
 	private HsqldbUserDao dao;
 	private ConnectionFactory connectionFactory;
 

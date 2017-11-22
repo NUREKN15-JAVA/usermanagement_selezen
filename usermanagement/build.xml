@@ -1,28 +1,25 @@
 <project name="usermanagement" default="test" basedir=".">
     <property file="${basedir}/build.properties"/>
 	
-	<!-- clean the build directory so that we don't mix up old build with the new one -->
     <target name="clean">
         <delete dir="${build-dir}" failonerror="false"/>
     </target>
 	
-	<!-- initialize the directories -->
+	
     <target name="init"	depends="clean">
-    	<!-- main build directory -->
+    
         <mkdir dir="${build-dir}"/>
-    	<!-- directory for the compiled classes -->
-    	<mkdir dir="${classes-dir}"/>    
+        	<mkdir dir="${classes-dir}"/>    
     </target>
 
-	<!-- compile classes -->
-    <target name="compile" depends="init">
+	    <target name="compile" depends="init">
         <javac srcdir="${main-java-dir}" destdir="${classes-dir}" includeantruntime="true" debug="on">
-        	<!-- include libraries -->
+    
         	<classpath>
         	 	<fileset dir="${lib-dir}" />
         	 </classpath>
         </javac>
-    	<!-- copy resources -->
+    
     	<copy todir="${classes-dir}">
     		<fileset dir="${main-resources-dir}">
     			<include name="**/*.properties"/>
@@ -70,14 +67,14 @@
 		
 	
 	
-	<!-- compile tests -->
+	
     <target name="test-compile" depends="compile">
         <javac srcdir="${test-java-dir}" destdir="${classes-dir}" includeantruntime="on" debug="on">
         	<classpath>
         		<fileset dir="${lib-dir}" />
         	</classpath>    
         </javac>
-    	<!-- copy resources -->
+    
     	<copy todir="${classes-dir}">
     	 	<fileset dir="${test-resources-dir}">
     	 		<include name="**/*.properties"/>
@@ -87,7 +84,7 @@
     </target>
 
     <target name="test" depends="test-compile" description="description">
-    	<!-- create directory for the test results -->    	
+    
         <mkdir dir="${test-result-dir}"/>      
         <junit includeantruntime="on">
             <classpath>			
@@ -95,13 +92,12 @@
             	<fileset dir="${lib-dir}" />
             </classpath>
             <formatter type="plain"/>
-        	<!-- process test as a batch -->
-        	<batchtest todir="${test-result-dir}" fork="yes">
+    	<batchtest todir="${test-result-dir}" fork="yes">
         	    <fileset dir="${test-java-dir}"> 
         	        <include name ="**/*Test.java"/>
         		</fileset>
         	</batchtest>
-            <!-- <test name="com.anamakarevich.usermanagement.UserTest"></test>-->
+    
         </junit>
     </target>
 

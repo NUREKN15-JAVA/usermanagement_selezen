@@ -4,9 +4,9 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class User {
-	private Long id;
-	private String firstName;
-	private String lastName;
+	private static Long id;
+	private static String firstName;
+	private static String lastName;
 	private Date dateOfBirthday;
 
 	public User(User user) {
@@ -20,7 +20,7 @@ public class User {
 
 	}
 
-	public Long getId() {
+	public static Long getId() {
 		return id;
 	}
 
@@ -28,7 +28,7 @@ public class User {
 		this.id = id;
 	}
 
-	public String getFirstName() {
+	public static String getFirstName() {
 		return firstName;
 	}
 
@@ -36,7 +36,7 @@ public class User {
 		this.firstName = firstName;
 	}
 
-	public String getLastName() {
+	public static String getLastName() {
 		return lastName;
 	}
 
